@@ -45,7 +45,24 @@ async def handle_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     else:
         await query.edit_message_text("Unknown option")
+import os
+from flask import Flask
+from threading import Thread
 
+app = Flask('')
+
+@app.route('/')
+def home():
+    return "Bot is running."
+
+def run():
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host='0.0.0.0', port=port)
+
+def keep_alive():
+    t = Thread(target=run)
+    t.start()
+    
 async def main():
     app = ApplicationBuilder().token(TOKEN).build()
     app.add_handler(CommandHandler("start", start))
@@ -56,6 +73,7 @@ async def main():
 
 if __name__ == "__main__":
     import asyncio
+    keep_alive()
     try:
         asyncio.run(main())
     except RuntimeError:
