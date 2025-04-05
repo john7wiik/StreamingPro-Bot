@@ -68,6 +68,7 @@ async def main():
 # Keep-alive pour Render
 from flask import Flask
 from threading import Thread
+import os
 
 app_flask = Flask('')
 
