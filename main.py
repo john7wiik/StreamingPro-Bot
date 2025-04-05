@@ -6,7 +6,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, CallbackQueryHandler
 
 # TOKEN en dur
-TOKEN = "7919573124:AAGpVqOean0PRFt8bIwNojTwYEVRpwaFeWM"
+TOKEN = "7919573124:AAHUTWMcm__eGFOJdM5VRPzKS6vFoCLK5Yo"
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
