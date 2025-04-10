@@ -1,4 +1,5 @@
 import os
+import json
 import nest_asyncio
 nest_asyncio.apply()
 
@@ -7,8 +8,19 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, CallbackQueryHandler
 
 TOKEN = "7919573124:AAGsWqAFD1ICOFu3QwOIPEpw5Xhydlx1yGU"
+DATA_FILE = "clients.json"
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+
+def load_data():
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, "r") as f:
+            return json.load(f)
+    return {}
+
+def save_data(data):
+    with open(DATA_FILE, "w") as f:
+        json.dump(data, f, indent=2)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
@@ -19,6 +31,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         [InlineKeyboardButton("☎️ Support", callback_data="support")]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
+    await update.message.reply_text("❗ *Note*: If a Telegram ad appears under this message, ignore it. It’s not from us.", parse_mode="Markdown")
     await update.message.reply_text("✨ *Welcome to STREAMING PRO!* ✨\nEnjoy unlimited access to channels, movies & series — fast, HD, and global!", reply_markup=reply_markup, parse_mode="Markdown")
 
 async def handle_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -27,6 +40,13 @@ async def handle_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
 
     if query.data == "trial":
+        data = load_data()
+        user_id = str(user.id)
+        if user_id in data and data[user_id].get("trial_used"):
+            await query.edit_message_text("⚠️ You have already used your free trial.")
+            return
+        data[user_id] = {"trial_used": True}
+        save_data(data)
         await query.edit_message_text("🔥 Trial activated! One of our agents will contact you shortly with access.")
         username = f"@{user.username}" if user.username else user.full_name
         await context.bot.send_message(chat_id=7190874264, text=f"🔥 {username} requested a FREE TRIAL.")
