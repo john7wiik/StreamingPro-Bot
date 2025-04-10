@@ -3,6 +3,23 @@ import json
 import nest_asyncio
 nest_asyncio.apply()
 
+async def send_main_menu(update, context):
+    keyboard = [
+        [InlineKeyboardButton("🔥 Free Trial", callback_data="trial")],
+        [InlineKeyboardButton("💳 Buy Access", callback_data="buy")],
+        [InlineKeyboardButton("📦 Our Offers", callback_data="offers")],
+        [InlineKeyboardButton("❓ How to Pay", callback_data="howtopay")],
+        [InlineKeyboardButton("☎️ Support", callback_data="support")]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
+    # Envoie différent selon si c’est un message ou un bouton
+    if update.message:
+        await update.message.reply_text("❗ *Note*: If a Telegram ad appears under this message, ignore it. It’s not from us.", parse_mode="Markdown")
+        await update.message.reply_text("✨ *Welcome to STREAMING PRO!* ✨\nEnjoy unlimited access to channels, movies & series — fast, HD, and global!", reply_markup=reply_markup, parse_mode="Markdown")
+    elif update.callback_query:
+        await update.callback_query.edit_message_text("✨ *Welcome to STREAMING PRO!* ✨\nEnjoy unlimited access to channels, movies & series — fast, HD, and global!", reply_markup=reply_markup, parse_mode="Markdown")
+
 import logging
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, CallbackQueryHandler
@@ -22,7 +39,7 @@ def save_data(data):
     with open(DATA_FILE, "w") as f:
         json.dump(data, f, indent=2)
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         [InlineKeyboardButton("🔥 Free Trial", callback_data="trial")],
         [InlineKeyboardButton("💳 Buy Access", callback_data="buy")],
@@ -114,7 +131,7 @@ async def handle_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.edit_message_text("☎️ *Need help?*\nOur support team is one message away:\n👉 @StreamingProTV", parse_mode="Markdown")
 
     elif query.data == "back_to_menu":
-        await start(update, context)
+        await send_main_menu(update, context)
     else:
         await query.edit_message_text("⚠️ Unknown option.")
 
@@ -151,4 +168,11 @@ if __name__ == "__main__":
         asyncio.run(main())
     except RuntimeError:
         nest_asyncio.apply()
+
+    # Envoie différent selon si c’est un message ou un bouton
+    if update.message:
+        await update.message.reply_text("❗ *Note*: If a Telegram ad appears under this message, ignore it. It’s not from us.", parse_mode="Markdown")
+        await update.message.reply_text("✨ *Welcome to STREAMING PRO!* ✨\nEnjoy unlimited access to channels, movies & series — fast, HD, and global!", reply_markup=reply_markup, parse_mode="Markdown")
+    elif update.callback_query:
+        await update.callback_query.edit_message_text("✨ *Welcome to STREAMING PRO!* ✨\nEnjoy unlimited access to channels, movies & series — fast, HD, and global!", reply_markup=reply_markup, parse_mode="Markdown")
         asyncio.get_event_loop().run_until_complete(main())
