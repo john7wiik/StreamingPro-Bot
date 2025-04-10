@@ -76,6 +76,8 @@ async def handle_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         keyboard = [
             [InlineKeyboardButton("₿ Pay with Bitcoin", callback_data="btc")],
             [InlineKeyboardButton("Ξ Pay with Ethereum", callback_data="eth")],
+            [InlineKeyboardButton("💵 Pay with USDT (TRC20)", callback_data="usdt")],
+            [InlineKeyboardButton("⚡ Pay with Solana", callback_data="sol")],
             [InlineKeyboardButton("⬅️ Back", callback_data="buy")]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
@@ -86,13 +88,19 @@ async def handle_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
     elif query.data == "btc":
-        await query.edit_message_text("₿ *Bitcoin Payment*\n\n`bc1q59aagcv5etsavrw4amhlqqt0ptcl45gs3hs6da8er4ayeveqc8rsp7eenx`\n\n✅ Once payment is done, send your proof via @StreamingProTV", parse_mode="Markdown")
+        await query.edit_message_text("₿ *Bitcoin Payment*\n\n`bc1qwr6xmlfp8hhjh0exrxr22kkyv50wm20lzegwg9`\n\n✅ Once payment is done, send your proof via @StreamingProTV", parse_mode="Markdown")
 
     elif query.data == "eth":
-        await query.edit_message_text("Ξ *Ethereum Payment*\n\n`0x6Ee646f72C0a386c62f3599A775037ca362D5872`\n\n✅ Once payment is done, send your proof via @StreamingProTV", parse_mode="Markdown")
+        await query.edit_message_text("Ξ *Ethereum Payment*\n\n`0xf73aCe246bC7BFEAfa53ae8DC541fEA6282d66D2`\n\n✅ Once payment is done, send your proof via @StreamingProTV", parse_mode="Markdown")
+
+    elif query.data == "usdt":
+        await query.edit_message_text("💵 *USDT (TRC20) Payment*\n\n`TMP4Y3Gzr7fb9zqxWx8RZqJtgHZEkvCC6w`\n\n✅ Once payment is done, send your proof via @StreamingProTV", parse_mode="Markdown")
+
+    elif query.data == "sol":
+        await query.edit_message_text("⚡ *Solana (SOL) Payment*\n\n`5H6Qvzz29aCpxuRJ87eQoaF8K1obV8o9oymuzs8rMC26`\n\n✅ Once payment is done, send your proof via @StreamingProTV", parse_mode="Markdown")
 
     elif query.data == "howtopay":
-        await query.edit_message_text("❓ *How to Pay*\n\nWe currently accept payments via:\n- ₿ *Bitcoin (BTC)*\n- Ξ *Ethereum (ETH)*\n\nAfter sending your payment, make sure to send a screenshot or proof of transaction via 👉 @StreamingProTV so we can activate your access.", parse_mode="Markdown")
+        await query.edit_message_text("❓ *How to Pay*\n\nWe currently accept payments via:\n- ₿ *Bitcoin (BTC)*\n- Ξ *Ethereum (ETH)*\n- 💵 *USDT (TRC20)*\n- ⚡ *Solana (SOL)*\n\nAfter sending your payment, make sure to send a screenshot or proof of transaction via 👉 @StreamingProTV so we can activate your access.", parse_mode="Markdown")
 
     elif query.data == "offers":
         await query.edit_message_text(
